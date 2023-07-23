@@ -2,11 +2,11 @@ h1 {
   color: red;
 }
 
-huge {
+.huge {
   font-size: 10rem;
   font-weight: bold;
 }
 
-invisible {
+.invisible {
   visibility: hidden;
 }
