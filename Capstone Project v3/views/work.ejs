@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include("partials/heather.ejs") %>
+
+  <body>
+    <div class="container">
+      <div class="column">
+        <h1>Worklist</h1>
+        <form action="/submit" method="POST">
+          <input name="taskWork" type="text" placeholder="New item" required autocomplete="off" />
+          <button type="submit">Add</button>
+        </form>
+        <% for(let i=0; i < task.length; i++) { %>
+          <div class="item">
+            <input type="checkbox" onclick="this.nextElementSibling.classList.toggle('task-done');" />
+            <p>
+              <%= task[i] %>
+            </p>
+          </div>
+          <% } %>
+      </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+  </body>
+
+  <%- include("partials/footer.ejs") %>
+
+</html>
