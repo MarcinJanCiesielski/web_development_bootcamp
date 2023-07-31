@@ -13,14 +13,27 @@ app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
-  res.render("index.ejs");
+  res.render("index.ejs", { recipe: null });
 });
 
 app.post("/recipe", (req, res) => {
   //Step 3: Write your code here to make this behave like the solution website.
-  //Step 4: Add code to views/index.ejs to use the recieved recipe object.
+  const protein = req.body["choice"];
+  const recipe = returnRecipe(protein);
+
+  res.render("index.ejs", { recipe: recipe });
+  console.log(recipe);
 });
 
 app.listen(port, () => {
   console.log(`Server running on port: ${port}`);
 });
+
+function returnRecipe(choice) {
+  const recipes = JSON.parse(recipeJSON);
+  for (let i = 0; i < recipes.length; i++) {
+    if (recipes[i].ingredients.protein.name.toLowerCase() === choice) {
+      return recipes[i];
+    }
+  }
+}
