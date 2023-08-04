@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include("partials/heather.ejs") %>
+
+  <body>
+    <div class="container">
+      <div class="buttons">
+        <form id="myForm" method="get">
+        <input id="quote" type="submit" value="Another meme" formaction="/meme">
+        </form>
+      </div>
+      <% if (locals.imgLink) { %>
+        <img src= <%= imgLink%> >
+        <% } else { %>
+          <h1>Click button above to get your meme</h1>
+          <% } %>
+    </div>
+  </body>
+
+  <%- include("partials/footer.ejs") %>
+
+</html>

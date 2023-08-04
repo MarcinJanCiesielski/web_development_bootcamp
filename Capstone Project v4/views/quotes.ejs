@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include("partials/heather.ejs") %>
+
+
+  <body>
+    <div class="container">
+      
+      <div>
+        <form id="myForm" method="get" class="buttons">
+        <input id="quote" type="submit" value="Quote" formaction="/quote">
+        <input id="devQuote" type="submit" value="Programmer's quote" formaction="/dev-quote">
+      </div>
+
+      <% if (locals.quoteAuthor && locals.quoteText) { %>
+        <h1>
+          <%= quoteText %>
+        </h1>
+        <p class="quote-author">
+          <%= quoteAuthor %>
+        </p> 
+      <% } else { %>
+        <h1>Choose your quote</h1>
+      <% } %>
+    </div>
+  </body>
+
+  <%- include("partials/footer.ejs") %>
+
+</html>
