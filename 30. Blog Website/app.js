@@ -47,7 +47,6 @@ app.post("/createPost", (req, res) => {
 })
 
 app.get("/posts/:postTitle", (req, res) => {
-  console.log(req.params.postTitle);
   res.render("post.ejs", {
     post: postCheck(req.params.postTitle)
   });
@@ -60,10 +59,8 @@ app.listen(3000, function() {
 function postCheck(title) {
   for (let post of posts) {
     if (lodash.lowerCase(post.title) === lodash.lowerCase(title)) {
-      console.log("Match");
       return post;
     }
   }
-  console.log("NOT Match");
   return null;
 }
