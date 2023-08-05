@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include("partials/header.ejs") %>
+<body>
+  <h1>Compose</h1>
+  <form method="POST">
+    <div class="form-group">
+      <label for="newPostTitle" class="form-label">Title</label>
+      <input class="form-control"type="text" autocomplete="off" id="newPostTitle" name="newPostTitle" required>
+      <label class="form-label" for="newPostContent">Post</label>
+      <textarea class="form-control" name="newPostContent" id="newPostContent" cols="40" rows="5"></textarea>
+    </div>
+    <button class="btn btn-primary" formaction="/createPost">Publish</button>
+  </form>
+</body>
+
+<%- include("partials/footer.ejs") %>
+
+</html>
+
