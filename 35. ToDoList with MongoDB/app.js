@@ -4,15 +4,23 @@ import express from "express";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import lodash from "lodash";
+import secrets from "../secrets.json"  assert { type: 'json' };
 
 const app = express();
+const dbName = 'todolistDB';
 
 app.set('view engine', 'ejs');
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
-mongoose.connect("mongodb://127.0.0.1:27017/todolistDB");
+const mongoDBLocal = "mongodb://127.0.0.1:27017/" + dbName;
+
+const mongoDBAtlasCloudUser = secrets["mongo_db_cloud_user"];
+const mongoDBAtlasCloudPassword = secrets["mongo_db_cloud_password"];
+const mongoDBAtlasCloud = `mongodb+srv://${mongoDBAtlasCloudUser}:${mongoDBAtlasCloudPassword}@cluster0.scvae0n.mongodb.net/${dbName}`;
+
+mongoose.connect(mongoDBAtlasCloud);
 
 const itemSchema = new mongoose.Schema({
   name: { type: String, required: true },
