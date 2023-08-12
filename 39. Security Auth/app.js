@@ -1,10 +1,11 @@
 //jshint esversion:6
-import secrets from "../secrets.json" assert { type: 'json' };
+import "dotenv/config";
 import express from "express";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import encrypt from "mongoose-encryption";
 import ejs from "ejs";
+
 
 const dbName = "userDB";
 const url_mongo = "mongodb://127.0.0.1:27017/" + dbName;
@@ -23,7 +24,7 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.plugin(encrypt, {
-  secret: secrets["mongo_encrypt_secret"],
+  secret: process.env.MONGO_ENCRYPT_SECRET,
   encryptedFields: ['password']
 });
 
@@ -77,7 +78,6 @@ app.post("/login", async (req, res) => {
     res.render("login");
   }
 });
-
 
 app.listen(port, () => {
   console.log("App is listening on port " + port);
