@@ -3,9 +3,8 @@ import "dotenv/config";
 import express from "express";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
-import encrypt from "mongoose-encryption";
+import md5 from "md5";
 import ejs from "ejs";
-
 
 const dbName = "userDB";
 const url_mongo = "mongodb://127.0.0.1:27017/" + dbName;
@@ -23,13 +22,7 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
 });
 
-userSchema.plugin(encrypt, {
-  secret: process.env.MONGO_ENCRYPT_SECRET,
-  encryptedFields: ['password']
-});
-
 const User = mongoose.model("User", userSchema);
-
 
 app.get("/", (req, res) => {
   res.render("home");
@@ -47,10 +40,10 @@ app.post("/register", async (req, res) => {
   try {
     const newUser = User({
       email: req.body.username,
-      password: req.body.password,
+      password: md5(req.body.password),
     });
     newUser.save().then(savedDoc => {
-      if (savedDoc === doc) {
+      if (savedDoc === newUser) {
         res.render("secrets");
       }
     });
@@ -66,9 +59,8 @@ app.post("/login", async (req, res) => {
       email: req.body.username,
     };
     const storedUser = await User.findOne(loginUser).exec();
-    console.log(storedUser);
 
-    if (storedUser.password === req.body.password) {
+    if (storedUser.password === md5(req.body.password)) {
       res.render("secrets");
     } else {
       res.render("login");
