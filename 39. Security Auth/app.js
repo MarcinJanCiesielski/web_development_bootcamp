@@ -32,7 +32,8 @@ mongoose.connect(url_mongo);
 const userSchema = new mongoose.Schema({
   email: { type: String },
 	password: { type: String },
-	googleId: {type: String}
+	googleId: {type: String },
+	secret: {type: String }
 });
 
 userSchema.plugin(passportLocalMongoose);
@@ -89,14 +90,20 @@ app.get("/register", async (req, res) => {
   res.render("register");
 });
 
-app.get("/secrets", (req, res) => {
-  if (req.isAuthenticated()) {
-    res.render("secrets");
-  } else {
-    res.redirect("/login");
-  }
+app.get("/secrets", async (req, res) => {
+	let foundUsersWithSecrets = await User.find({ "secret": { $ne: null } }).exec()
+	if (foundUsersWithSecrets) {
+		res.render("secrets", { usersWithSecrets: foundUsersWithSecrets });
+	}
 });
 
+app.get("/submit", (req, res) => {
+	if (req.isAuthenticated()) {
+		res.render("submit");
+	} else {
+		res.redirect("/login");
+	}
+});
 
 app.post("/register", async (req, res) => {
 	try {
@@ -141,6 +148,23 @@ app.get("/logout", (req, res, next) => {
 	});
 });
 
+app.post("/submit", async (req, res) => {
+	const submittedSecret = req.body.secret;
+	console.log(req.user);
+	try {
+		let user = await User.findById(req.user.id).exec();
+		if (user) {
+			user.secret = submittedSecret;
+			await user.save()
+			res.redirect("/secrets");
+		}
+	} catch (err) {
+		console.log(err.message)
+		res.send(err);
+	}
+	
+});
+
 app.listen(port, () => {
-  console.log("App is listening on port " + port);
-})
+	console.log("App is listening on port " + port);
+});
